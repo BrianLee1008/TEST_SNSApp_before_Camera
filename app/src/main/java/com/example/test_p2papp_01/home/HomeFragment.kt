@@ -31,36 +31,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		Firebase.database.reference.child(DB_USERS)
 	}
 
-	private val articleAdapter = ArticleAdapter(onItemClickListener = { articleModel ->
-		//로그인 했는지부터 확인 후
-		if (auth.currentUser != null) {
-			if (auth.currentUser?.uid != articleModel.sellerId) { // 아이디 다를경우
-				val chatRoom = ChatListItem(
-					buyerId = auth.currentUser!!.uid,
-					sellerId = articleModel.sellerId,
-					itemTitle = articleModel.title,
-					key = System.currentTimeMillis()
-				)
+	private lateinit var articleAdapter : ArticleAdapter
 
-				userDB.child(auth.currentUser!!.uid)
-					.child(DB_CHILD_CHAT)
-					.push()
-					.setValue(chatRoom)
 
-				userDB.child(articleModel.sellerId)
-					.child(DB_CHILD_CHAT)
-					.push()
-					.setValue(chatRoom)
-
-				Snackbar.make(binding!!.root, "채팅방이 생성 됨. 채팅 탭 화인.", Snackbar.LENGTH_LONG).show()
-			} else { // 아이디 같을경우
-				Snackbar.make(binding!!.root, "니가 올림거임.", Snackbar.LENGTH_LONG).show()
-			}
-		} else {
-			// 로그인 안함
-			Snackbar.make(binding!!.root, "로그인 후 사용해 주세요.", Snackbar.LENGTH_LONG).show()
-		}
-	})
 	private val articleList = mutableListOf<ArticleModel>()
 
 	// RTDB
@@ -91,6 +64,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		val fragmentHomeBinding = FragmentHomeBinding.bind(view)
 		binding = fragmentHomeBinding
 
+		articleList.clear()
+
+		setArticleAdapter()
 		articleDB.addChildEventListener(listener)
 
 		fragmentHomeBinding.let {
@@ -105,8 +81,39 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				}
 			}
 		}
+	}
 
+	private fun setArticleAdapter(){
+		articleAdapter = ArticleAdapter(onItemClickListener = { articleModel ->
+			//로그인 했는지부터 확인 후
+			if (auth.currentUser != null) {
+				if (auth.currentUser?.uid != articleModel.sellerId) { // 아이디 다를경우
+					val chatRoom = ChatListItem(
+						buyerId = auth.currentUser!!.uid,
+						sellerId = articleModel.sellerId,
+						itemTitle = articleModel.title,
+						key = System.currentTimeMillis()
+					)
 
+					userDB.child(auth.currentUser!!.uid)
+						.child(DB_CHILD_CHAT)
+						.push()
+						.setValue(chatRoom)
+
+					userDB.child(articleModel.sellerId)
+						.child(DB_CHILD_CHAT)
+						.push()
+						.setValue(chatRoom)
+
+					Snackbar.make(binding!!.root, "채팅방이 생성 됨. 채팅 탭 화인.", Snackbar.LENGTH_LONG).show()
+				} else { // 아이디 같을경우
+					Snackbar.make(binding!!.root, "니가 올림거임.", Snackbar.LENGTH_LONG).show()
+				}
+			} else {
+				// 로그인 안함
+				Snackbar.make(binding!!.root, "로그인 후 사용해 주세요.", Snackbar.LENGTH_LONG).show()
+			}
+		})
 	}
 
 

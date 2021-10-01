@@ -1,13 +1,20 @@
 package com.example.test_p2papp_01
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.test_p2papp_01.chatlist.ChatListFragment
+import com.example.test_p2papp_01.databinding.ActivityMainBinding
+import com.example.test_p2papp_01.home.AddArticleActivity
 import com.example.test_p2papp_01.home.HomeFragment
 import com.example.test_p2papp_01.mypage.MyPageFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 /* xo 흐름
 * 1. 각각의 Fragment와 NavigationBar를 연결
@@ -29,13 +36,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
-	private val bottomNavigationBar by lazy {
-		findViewById<BottomNavigationView>(R.id.bottomNavigationBar)
+	private val auth : FirebaseAuth by lazy {
+		Firebase.auth
 	}
 
+
+	private lateinit var binding : ActivityMainBinding
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_main)
+		binding = ActivityMainBinding.inflate(layoutInflater)
+		setContentView(binding.root)
 
 		val homeFragment = HomeFragment()
 		val chatListFragment = ChatListFragment()
@@ -43,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
 		replaceFragment(homeFragment)
 
-		bottomNavigationBar.setOnItemSelectedListener {
+		binding.bottomNavigationBar.setOnItemSelectedListener {
 			when (it.itemId) {
 				R.id.home -> replaceFragment(homeFragment)
 				R.id.chatList -> replaceFragment(chatListFragment)
@@ -52,8 +62,10 @@ class MainActivity : AppCompatActivity() {
 			return@setOnItemSelectedListener true
 		}
 
-		bottomNavigationBar.background = null
-		bottomNavigationBar.menu.getItem(2).isEnabled = false
+		binding.bottomNavigationBar.background = null
+		binding.bottomNavigationBar.menu.getItem(2).isEnabled = false
+
+		startAddArticleActivity()
 
 	}
 
@@ -63,6 +75,18 @@ class MainActivity : AppCompatActivity() {
 			commit()
 		}
 	}
+
+	private fun startAddArticleActivity(){
+		binding.addFloatingButton.setOnClickListener {
+			if (auth.currentUser != null) {
+				startActivity(Intent(this, AddArticleActivity::class.java))
+			} else {
+				Snackbar.make(binding.root, "로그인 후 사용해 주세요.", Snackbar.LENGTH_LONG).show()
+				return@setOnClickListener
+			}
+		}
+	}
+
 
 
 }

@@ -47,6 +47,8 @@
 
         </com.google.android.material.bottomappbar.BottomAppBar>
 
+
+        <!--material은 background값이 먹히지 않고 backgroundTint값이 먹힌다.-->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addFloatingButton"
             android:layout_width="wrap_content"

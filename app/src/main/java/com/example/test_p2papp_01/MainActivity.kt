@@ -7,6 +7,7 @@ import com.example.test_p2papp_01.chatlist.ChatListFragment
 import com.example.test_p2papp_01.home.HomeFragment
 import com.example.test_p2papp_01.mypage.MyPageFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /* xo 흐름
 * 1. 각각의 Fragment와 NavigationBar를 연결
@@ -27,6 +28,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 *  7. ChatList Fragment에서 Item 클릭하면 ChatRoom으로 입장. 이떄 DB에는 내 아이디와 message 내용 저장*/
 
 class MainActivity : AppCompatActivity() {
+
+	private val bottomNavigationBar by lazy {
+		findViewById<BottomNavigationView>(R.id.bottomNavigationBar)
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
@@ -34,11 +40,10 @@ class MainActivity : AppCompatActivity() {
 		val homeFragment = HomeFragment()
 		val chatListFragment = ChatListFragment()
 		val myPageFragment = MyPageFragment()
-		val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationBar)
 
 		replaceFragment(homeFragment)
 
-		bottomNavigationView.setOnItemSelectedListener {
+		bottomNavigationBar.setOnItemSelectedListener {
 			when (it.itemId) {
 				R.id.home -> replaceFragment(homeFragment)
 				R.id.chatList -> replaceFragment(chatListFragment)
@@ -46,6 +51,10 @@ class MainActivity : AppCompatActivity() {
 			}
 			return@setOnItemSelectedListener true
 		}
+
+		bottomNavigationBar.background = null
+		bottomNavigationBar.menu.getItem(2).isEnabled = false
+
 	}
 
 	private fun replaceFragment(fragment: Fragment) {
@@ -54,4 +63,6 @@ class MainActivity : AppCompatActivity() {
 			commit()
 		}
 	}
+
+
 }

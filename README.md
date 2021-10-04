@@ -8,3 +8,4 @@
 4. ViewPager2
 5. Glide
 6. CoodinatorLayout
+7. Coroutine

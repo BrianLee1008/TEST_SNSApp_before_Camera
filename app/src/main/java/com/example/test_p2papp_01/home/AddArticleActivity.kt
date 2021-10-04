@@ -50,6 +50,7 @@ class AddArticleActivity : AppCompatActivity() {
 
 	}
 
+	// 이미지 등록버튼 리스너
 	private fun setImageAddButtonListener() {
 		binding.imageAddButton.setOnClickListener {
 			when {
@@ -76,6 +77,7 @@ class AddArticleActivity : AppCompatActivity() {
 	}
 
 
+	// 권한 요청
 	override fun onRequestPermissionsResult(
 		requestCode: Int,
 		permissions: Array<out String>,
@@ -93,12 +95,14 @@ class AddArticleActivity : AppCompatActivity() {
 		}
 	}
 
+	// 갤러리 시작
 	private fun startContentProvider() {
 		val intent = Intent(Intent.ACTION_GET_CONTENT)
 		intent.type = "image/*"
 		startActivityForResult(intent, 2020)
 	}
 
+	// 갤러리 이동 이후 액션
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 		when (requestCode) {
@@ -118,6 +122,7 @@ class AddArticleActivity : AppCompatActivity() {
 	}
 
 
+	// 교육용 다이얼로그
 	private fun showPermissionContextPopup() {
 		AlertDialog.Builder(this)
 			.setTitle("권한이 필요합니다.")
@@ -132,6 +137,7 @@ class AddArticleActivity : AppCompatActivity() {
 	}
 
 
+	// 이미지 업로드
 	private fun saveReferenceInDB() {
 		// 이미지 등록 버튼 누르면 storage에 저장, Uri는 DB에 저장
 		binding.submitButton.setOnClickListener {
@@ -179,7 +185,7 @@ class AddArticleActivity : AppCompatActivity() {
 
 	}
 
-	//Model에 저장
+	//Firebase RealTime Database 저장
 	private fun uploadArticles(title: String, price: String, sellerId: String, imageUrl: String) {
 		val model = ArticleModel(sellerId, title, System.currentTimeMillis(), "$price 원", imageUrl)
 

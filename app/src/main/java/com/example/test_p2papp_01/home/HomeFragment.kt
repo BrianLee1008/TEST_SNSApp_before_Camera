@@ -1,6 +1,6 @@
 package com.example.test_p2papp_01.home
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -109,6 +109,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	}
 
 
+	@SuppressLint("NotifyDataSetChanged")
 	override fun onResume() {
 		super.onResume()
 		articleAdapter.notifyDataSetChanged()

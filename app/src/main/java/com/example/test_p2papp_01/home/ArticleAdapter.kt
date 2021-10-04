@@ -1,5 +1,6 @@
 package com.example.test_p2papp_01.home
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -15,6 +16,7 @@ class ArticleAdapter(val onItemClickListener: (ArticleModel) -> Unit) :
 
 	inner class ViewHolder(private val binding: ItemArticleBinding) :
 		RecyclerView.ViewHolder(binding.root) {
+		@SuppressLint("SimpleDateFormat")
 		fun bind(articleModel: ArticleModel) {
 			binding.run {
 				val format = SimpleDateFormat("MM월 dd일")

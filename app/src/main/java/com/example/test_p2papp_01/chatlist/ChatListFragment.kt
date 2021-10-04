@@ -24,6 +24,7 @@ class ChatListFragment : Fragment(R.layout.fragment_chatlist) {
 		Firebase.auth
 	}
 
+
 	private val chatRoomList = mutableListOf<ChatListItem>()
 
 	private val chatListAdapter = ChatListAdapter(onItemClicked = {
